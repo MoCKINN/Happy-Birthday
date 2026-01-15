@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Birthday, Latasha!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #0b0c1a 0%, #0f1020 100%);
+      color: #fff;
+      overflow: hidden;
+    }
+    .wrap {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+    }
+    .title {
+      font-family: 'Pacifico', cursive;
+      font-size: 3rem;
+      color: #ffd166;
+      margin: 0 0 10px;
+    }
+    .name {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 18px;
+    }
+    .wish {
+      font-size: 1.2rem;
+      color: #cfd3ff;
+      margin: 0 auto 28px;
+      max-width: 60ch;
+    }
+    .cta {
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: none;
+      background: linear-gradient(180deg, #ff7ac6, #ff4fa3);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .cta:hover { transform: scale(1.05); }
+    .bears {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    .bears img {
+      width: 200px;
+      height: auto;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    canvas#confetti {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+  <main class="wrap">
+    <section class="card">
+      <h1 class="title">Happy Birthday!</h1>
+      <p class="name">Latasha Sharma</p>
+      <p class="wish">
+        Wishing you a year full of bright moments, loud laughter, and the kind of joy that lingers.
+      </p>
+      <button id="celebrate" class="cta">🎉 Celebrate Latasha 🎉</button>
+
+      <!-- Bear image from the link you provided -->
+      <div class="bears">
+        <img src="https://imgcdn.stablediffusionweb.com/2025/2/4/e96ecee9-cfae-4108-9767-92669c7d8cec.jpg" alt="Cute bear with green eyes" />
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Confetti engine
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let W, H;
+    function resize() {
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function randomColor() {
+      const colors = ['#ff7ac6','#ffd166','#7bdff2','#caffbf','#bdb2ff','#ffffff'];
+      return colors[Math.floor(Math.random()*colors.length)];
+    }
+
+    function burstConfetti() {
+      const pieces = [];
+      for (let i=0; i<250; i++) {
+        pieces.push({
+          x: Math.random()*W,
+          y: Math.random()*H,
+          w: 6+Math.random()*6,
+          h: 10+Math.random()*10,
+          color: randomColor(),
+          vx: -3+Math.random()*6,
+          vy: -3+Math.random()*6,
+          rot: Math.random()*Math.PI*2,
+          vr: -0.05+Math.random()*0.1
+        });
+      }
+      function draw() {
+        ctx.clearRect(0,0,W,H);
+        for (const p of pieces) {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          ctx.save();
+          ctx.translate(p.x,p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+          ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+          ctx.restore();
+        }
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    document.getElementById('celebrate').addEventListener('click', burstConfetti);
+  </script>
+</body>
+</html>
